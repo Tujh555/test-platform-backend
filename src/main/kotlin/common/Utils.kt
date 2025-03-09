@@ -11,10 +11,9 @@ import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 
-suspend fun <T> queryCatching(block: suspend Transaction.() -> T): T? {
-    val result = runCatching { newSuspendedTransaction(context = Dispatchers.IO, statement = block) }
-    return result.getOrNull()
-}
+suspend fun <T> queryCatching(block: suspend Transaction.() -> T): T? = runCatching { query(block) }.getOrNull()
+
+suspend fun <T> query(block: suspend Transaction.() -> T) = newSuspendedTransaction(Dispatchers.IO, statement = block)
 
 suspend inline fun <reified T : Any> RoutingCall.respondRes(response: Response<T>) {
     when (response) {

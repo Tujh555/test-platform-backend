@@ -5,8 +5,7 @@ import com.example.auth.database.Users
 import com.example.auth.request.AuthRequest
 import com.example.auth.request.AuthResponse
 import com.example.auth.request.LogoutRequest
-import com.example.common.Response
-import com.example.common.queryCatching
+import com.example.common.*
 import com.example.models.UserDto
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
@@ -16,18 +15,18 @@ import org.mindrot.jbcrypt.BCrypt
 import java.util.*
 
 class AuthService {
-    suspend fun register(request: AuthRequest): Response<AuthResponse> = queryCatching {
+    suspend fun register(request: AuthRequest): Response<AuthResponse> = query {
         if (resolveUser(request.email) != null) {
-            return@queryCatching Response.Error(401)
+            return@query _error(401)
         }
         val (user, token) = insertNew(request.email, request.password)
-        Response.Success(AuthResponse(user, token))
+        success { AuthResponse(user, token) }
     }
 
-    suspend fun login(request: AuthRequest): Response<AuthResponse> = queryCatching {
-        val existing = resolveUser(request.email) ?: return@queryCatching Response.Error(402)
+    suspend fun login(request: AuthRequest): Response<AuthResponse> = query {
+        val existing = resolveUser(request.email) ?: return@query _error(402)
         if (BCrypt.checkpw(request.password, existing[Users.password]).not()) {
-            return@queryCatching Response.Error(403)
+            return@query _error(403)
         }
         val freshToken = UUID.randomUUID().toString()
         Tokens.insert {
@@ -41,7 +40,7 @@ class AuthService {
                 avatar = get(Users.avatar)
             )
         }
-        Response.Success(AuthResponse(dto, freshToken))
+        success { AuthResponse(dto, freshToken) }
     }
 
     suspend fun logout(request: LogoutRequest) {

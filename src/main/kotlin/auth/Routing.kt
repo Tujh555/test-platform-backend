@@ -35,23 +35,21 @@ fun Application.authRouting() {
                 val response = service.register(request)
                 call.respondRes(response)
             }
-        }
 
-        post("/login") {
-            val request = call.receive<AuthRequest>()
-            println("login; request = $request")
-            val response = service.login(request)
-            println("response = $response")
-            call.respondRes(response)
-        }
+            post("/login") {
+                val request = call.receive<AuthRequest>()
+                val response = service.login(request)
+                call.respondRes(response)
+            }
 
-        post("/logout") {
-            try {
-                val request = call.receive<LogoutRequest>()
-                service.logout(request)
-                call.respond("")
-            } catch (e: Exception) {
-                call.respond(HttpStatusCode.BadRequest, e.message ?: "Unknown error")
+            post("/logout") {
+                try {
+                    val request = call.receive<LogoutRequest>()
+                    service.logout(request)
+                    call.respond("")
+                } catch (e: Exception) {
+                    call.respond(HttpStatusCode.BadRequest, e.message ?: "Unknown error")
+                }
             }
         }
     }

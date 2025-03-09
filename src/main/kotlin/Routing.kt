@@ -1,18 +1,12 @@
 package com.example
 
+import com.example.auth.authRouting
+import com.example.profile.profileRouting
+import com.example.quiz.quizRouting
 import io.ktor.http.*
-import io.ktor.serialization.gson.*
-import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
-import io.ktor.server.http.content.*
-import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.statuspages.*
-import io.ktor.server.request.*
 import io.ktor.server.response.*
-import io.ktor.server.routing.*
-import java.sql.Connection
-import java.sql.DriverManager
-import org.jetbrains.exposed.sql.*
 
 fun Application.configureRouting() {
     install(StatusPages) {
@@ -20,8 +14,7 @@ fun Application.configureRouting() {
             call.respondText(text = "500: $cause" , status = HttpStatusCode.InternalServerError)
         }
     }
-    routing {
-        // Static plugin. Try to access `/static/index.html`
-        staticResources("/static", "static")
-    }
+    authRouting()
+    profileRouting()
+    quizRouting()
 }

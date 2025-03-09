@@ -6,6 +6,7 @@ kotlin-version = "2.1.10"
 ktor-version = "3.1.1"
 logback-version = "1.4.14"
 jbcrypt-version = "0.4"
+thumbnailator-version = "0.4.20"
 
 [libraries]
 ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor-version" }
@@ -22,6 +23,7 @@ ktor-server-auth = { module = "io.ktor:ktor-server-auth", version.ref = "ktor-ve
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback-version" }
 ktor-server-config-yaml = { module = "io.ktor:ktor-server-config-yaml", version.ref = "ktor-version" }
 jbcrypt = { group = "org.mindrot", name = "jbcrypt", version.ref = "jbcrypt-version" }
+thumbnailator = { group = "net.coobird", name = "thumbnailator", version.ref = "thumbnailator-version" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }

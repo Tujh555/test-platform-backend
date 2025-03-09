@@ -35,4 +35,5 @@ dependencies {
     implementation(libs.logback.classic)
     implementation(libs.ktor.server.config.yaml)
     implementation(libs.jbcrypt)
+    implementation(libs.thumbnailator)
 }
